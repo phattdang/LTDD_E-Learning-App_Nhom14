@@ -1,15 +1,14 @@
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 interface CategoryCardProps {
   name: string;
-  icon: string;
-  color: string;
+  image: string;
 }
 
-export default function CategoryCard({ name, icon, color }: CategoryCardProps) {
+export default function CategoryCard({ name, image }: CategoryCardProps) {
   return (
-    <TouchableOpacity style={[styles.container, { backgroundColor: color }]}>
-      <Text style={styles.icon}>{icon}</Text>
+    <TouchableOpacity style={styles.container}>
+      <Image source={{ uri: image }} style={styles.icon} />
       <Text style={styles.name}>{name}</Text>
     </TouchableOpacity>
   );
@@ -24,14 +23,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
   },
   icon: {
-    fontSize: 28,
+    width: 40,
+    height: 40,
+    resizeMode: "contain",
     marginBottom: 8,
   },
   name: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#fff",
+    color: "#000000",
   },
 });

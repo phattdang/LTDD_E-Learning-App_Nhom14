@@ -1,28 +1,35 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 interface CourseCardProps {
   course: {
-    id: string
-    title: string
-    instructor: string
-    price: string
-    rating: number
-    reviews: number
-    lessons: number
-    image: any
-    isBestSeller?: boolean
-    discount?: string
-  }
-  isVertical?: boolean
+    id: number;
+    name: string;
+    image: string;
+    numOfLessons: number;
+    numOfRates: number;
+    averageRate: number;
+    reviews: any[];
+    desc: string;
+    price: string;
+    types: string[];
+    isBestSeller?: boolean;
+    discount?: string;
+  };
+  isVertical?: boolean;
 }
 
 export default function CourseCard({ course, isVertical }: CourseCardProps) {
+  // Component chung để hiển thị lessons
+  const LessonText = () => (
+    <Text style={styles.lessonText}>{course.numOfLessons} lessons</Text>
+  );
+
   if (isVertical) {
     return (
       <View style={styles.verticalContainer}>
         <View style={styles.verticalImageContainer}>
-          <Image source={course.image} style={styles.verticalImage} />
+          <Image source={{ uri: course.image }} style={styles.verticalImage} />
           {course.discount && (
             <View style={styles.discountBadge}>
               <Text style={styles.discountText}>{course.discount}</Text>
@@ -31,27 +38,30 @@ export default function CourseCard({ course, isVertical }: CourseCardProps) {
         </View>
         <View style={styles.verticalContent}>
           <Text style={styles.title} numberOfLines={2}>
-            {course.title}
+            {course.name}
           </Text>
-          <Text style={styles.instructor}>{course.instructor}</Text>
+          <Text style={styles.instructor}>{course.desc}</Text>
           <View style={styles.footer}>
-            <Text style={styles.price}>{course.price}</Text>
+            <View>
+              <Text style={styles.price}>{course.price}</Text>
+              <LessonText />
+            </View>
             <View style={styles.rating}>
               <Ionicons name="star" size={14} color="#FFB800" />
               <Text style={styles.ratingText}>
-                {course.rating} ({course.reviews})
+                {course.averageRate} ({course.numOfRates})
               </Text>
             </View>
           </View>
         </View>
       </View>
-    )
+    );
   }
 
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={course.image} style={styles.image} />
+        <Image source={{ uri: course.image }} style={styles.image} />
         {course.isBestSeller && (
           <View style={styles.bestSellerBadge}>
             <Text style={styles.bestSellerText}>Best seller</Text>
@@ -60,23 +70,26 @@ export default function CourseCard({ course, isVertical }: CourseCardProps) {
       </View>
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={2}>
-          {course.title}
+          {course.name}
         </Text>
         <Text style={styles.instructor} numberOfLines={1}>
-          {course.instructor}
+          {course.desc}
         </Text>
         <View style={styles.footer}>
-          <Text style={styles.price}>{course.price}</Text>
+          <View>
+            <Text style={styles.price}>{course.price}</Text>
+            <LessonText />
+          </View>
           <View style={styles.rating}>
             <Ionicons name="star" size={12} color="#FFB800" />
             <Text style={styles.ratingText}>
-              {course.rating} ({course.reviews})
+              {course.averageRate} ({course.numOfRates})
             </Text>
           </View>
         </View>
       </View>
     </TouchableOpacity>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -128,12 +141,17 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
   },
   price: {
     fontSize: 14,
     fontWeight: "bold",
     color: "#00BCD4",
+  },
+  lessonText: {
+    fontSize: 10,
+    color: "#666",
+    marginTop: 2,
   },
   rating: {
     flexDirection: "row",
@@ -180,4 +198,4 @@ const styles = StyleSheet.create({
     padding: 12,
     justifyContent: "space-between",
   },
-})
+});

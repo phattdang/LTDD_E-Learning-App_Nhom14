@@ -1,114 +1,21 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import Header from "../components/home/Header";
 import PromoBanner from "../components/home/PromoBanner";
 import SectionTitle from "../components/home/SectionTitle";
 import CategoriesGrid from "../components/home/CategoriesGrid";
 import CourseCard from "../components/home/CourseCard";
 import TeacherCard from "../components/home/TeacherCard";
+import useFetch from "../hooks/useFetch";
+import { createApi } from "../apis/baseApi";
+import Course from "../types/Course";
+import courseApi from "../apis/courseApi";
+import Account from "../types/Account";
+import accountsApi from "../apis/accountApi";
 
 export default function HomeScreen() {
-  const popularCourses = [
-    {
-      id: "1",
-      title: "PHP in One Click",
-      instructor: "Ramono Wutschner",
-      price: "$59",
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 18,
-      image: require("../../assets/php-course.png"),
-      isBestSeller: false,
-    },
-    {
-      id: "2",
-      title: "Python Introduction",
-      instructor: "Ramono Wutschner",
-      price: "$39",
-      rating: 4.5,
-      reviews: 1267,
-      lessons: 12,
-      image: require("../../assets/python-course.png"),
-      isBestSeller: true,
-    },
-  ];
+  const { data, loading, error, refetch } = useFetch<Course>(courseApi.getAll);
 
-  const recommendedCourses = [
-    {
-      id: "3",
-      title: "Website Design",
-      instructor: "Ramono Wutschner",
-      price: "$59",
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 9,
-      image: require("../../assets/website-design.png"),
-      isBestSeller: false,
-    },
-    {
-      id: "4",
-      title: "UX Research For...",
-      instructor: "Olivia Wang",
-      price: "$29",
-      rating: 4.5,
-      reviews: 1782,
-      lessons: 12,
-      image: require("../../assets/ux-research.png"),
-      isBestSeller: false,
-      discount: "20% Off",
-    },
-  ];
-
-  const inspiredCourses = [
-    {
-      id: "5",
-      title: "Digital Portrait",
-      instructor: "Ramono Wutschner",
-      price: "$67",
-      rating: 4.5,
-      reviews: 657,
-      lessons: 12,
-      image: require("../../assets/digital-portrait.png"),
-    },
-    {
-      id: "6",
-      title: "Workspace Decor",
-      instructor: "Ruth Dominguez",
-      price: "$19",
-      rating: 4.5,
-      reviews: 33,
-      lessons: 17,
-      image: require("../../assets/workspace-decor.png"),
-    },
-    {
-      id: "7",
-      title: "Packaging Design",
-      instructor: "Hui Anderson",
-      price: "$89",
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 14,
-      image: require("../../assets/packaging-design.png"),
-    },
-  ];
-
-  const teachers = [
-    {
-      id: "1",
-      name: "Christian Hayes",
-      university: "University of",
-      rating: 4.5,
-      reviews: 1233,
-      image: require("../../assets/teacher-avatar.png"),
-    },
-    {
-      id: "2",
-      name: "Dennis Sweeney",
-      university: "University of",
-      rating: 4.5,
-      reviews: 1233,
-      image: require("../../assets/teacher-avatar.png"),
-    },
-  ];
+ 
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -122,12 +29,16 @@ export default function HomeScreen() {
 
       <View style={styles.section}>
         <SectionTitle title="Popular courses" viewMore="View more" />
+
+        {loading && <Text>Đang tải dữ liệu...</Text>}
+        {error && <Text style={{ color: "red" }}>Lỗi: {error}</Text>}
+
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.horizontalScroll}
         >
-          {popularCourses.map((course) => (
+          {data?.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </ScrollView>
@@ -140,7 +51,7 @@ export default function HomeScreen() {
           showsHorizontalScrollIndicator={false}
           style={styles.horizontalScroll}
         >
-          {recommendedCourses.map((course) => (
+          {data?.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </ScrollView>
@@ -148,22 +59,9 @@ export default function HomeScreen() {
 
       <View style={styles.section}>
         <SectionTitle title="Course that inspires" viewMore="View more" />
-        {inspiredCourses.map((course) => (
+        {data?.map((course) => (
           <CourseCard key={course.id} course={course} isVertical />
         ))}
-      </View>
-
-      <View style={styles.section}>
-        <SectionTitle title="Top teachers" viewMore="View more" />
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.horizontalScroll}
-        >
-          {teachers.map((teacher) => (
-            <TeacherCard key={teacher.id} teacher={teacher} />
-          ))}
-        </ScrollView>
       </View>
 
       <View style={{ height: 20 }} />

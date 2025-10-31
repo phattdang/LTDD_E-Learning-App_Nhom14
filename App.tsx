@@ -1,15 +1,18 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { AuthProvider } from "./src/contexts/AuthContext";
+import type React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigator from "./src/navigation/AppNavigation";
 
-export default function App() {
+export default function App(): React.ReactNode {
+  
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <AuthProvider>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </AuthProvider>
   );
 }
