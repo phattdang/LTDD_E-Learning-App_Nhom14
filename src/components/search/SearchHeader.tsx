@@ -1,5 +1,5 @@
 import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
 
 interface SearchHeaderProps {
   searchQuery: string
@@ -11,16 +11,16 @@ export default function SearchHeader({ searchQuery, onSearchChange, onFilterPres
   return (
     <View style={styles.container}>
       <View style={styles.searchBox}>
-        <MaterialCommunityIcons name="magnify" size={20} color="#999" />
+        <Ionicons name="search" size={20} color="#999" />
         <TextInput
           style={styles.input}
-          placeholder="Design"
+          placeholder="Search course"
+          placeholderTextColor="#999"
           value={searchQuery}
           onChangeText={onSearchChange}
-          placeholderTextColor="#999"
         />
       </View>
-      <TouchableOpacity style={styles.filterButton} onPress={onFilterPress}>
+      <TouchableOpacity style={styles.filterBtn} onPress={onFilterPress}>
         <MaterialCommunityIcons name="filter-variant" size={20} color="#fff" />
       </TouchableOpacity>
     </View>
@@ -30,10 +30,10 @@ export default function SearchHeader({ searchQuery, onSearchChange, onFilterPres
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    gap: 12,
+    gap: 10,
+    alignItems: "center",
   },
   searchBox: {
     flex: 1,
@@ -42,19 +42,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     borderRadius: 8,
     paddingHorizontal: 12,
-    height: 44,
     gap: 8,
   },
   input: {
     flex: 1,
+    paddingVertical: 10,
     fontSize: 16,
     color: "#333",
   },
-  filterButton: {
-    backgroundColor: "#00bcd4",
+  filterBtn: {
+    backgroundColor: "#17C1E8",
+    paddingHorizontal: 14,
+    paddingVertical: 10,
     borderRadius: 8,
-    width: 44,
-    height: 44,
     justifyContent: "center",
     alignItems: "center",
   },
