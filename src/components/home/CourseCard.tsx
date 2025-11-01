@@ -1,35 +1,51 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native"
+import { Ionicons } from "@expo/vector-icons"
+import { useNavigation } from "@react-navigation/native"
 
 interface CourseCardProps {
   course: {
-    id: number;
-    name: string;
-    image: string;
-    numOfLessons: number;
-    numOfRates: number;
-    averageRate: number;
-    reviews: any[];
-    desc: string;
-    price: string;
-    types: string[];
-    isBestSeller?: boolean;
-    discount?: string;
-  };
-  isVertical?: boolean;
+    id: number
+    name: string
+    image?: string
+    numOfLessons?: number
+    numOfRates?: number
+    averageRate?: number
+    reviews?: any[]
+    desc?: string
+    price?: string
+    types?: string[]
+    isBestSeller?: boolean
+    discount?: string
+  }
+  isVertical?: boolean
 }
 
 export default function CourseCard({ course, isVertical }: CourseCardProps) {
-  // Component chung để hiển thị lessons
+  const navigation = useNavigation<any>()
+
+  if (!course) {
+    console.warn("⚠️ Không nhận được dữ liệu 'course' trong CourseCard.")
+    return null
+  }
+
+  const imageSource =
+    course.image && course.image.trim() !== ""
+      ? { uri: course.image }
+      : { uri: "https://via.placeholder.com/300x200.png?text=No+Image" }
+
+  const handlePress = () => {
+    navigation.navigate("CourseDetails", { course })
+  }
+
   const LessonText = () => (
-    <Text style={styles.lessonText}>{course.numOfLessons} lessons</Text>
-  );
+    <Text style={styles.lessonText}>{course.numOfLessons || 0} lessons</Text>
+  )
 
   if (isVertical) {
     return (
-      <View style={styles.verticalContainer}>
+      <TouchableOpacity style={styles.verticalContainer} onPress={handlePress}>
         <View style={styles.verticalImageContainer}>
-          <Image source={{ uri: course.image }} style={styles.verticalImage} />
+          <Image source={imageSource} style={styles.verticalImage} />
           {course.discount && (
             <View style={styles.discountBadge}>
               <Text style={styles.discountText}>{course.discount}</Text>
@@ -38,30 +54,30 @@ export default function CourseCard({ course, isVertical }: CourseCardProps) {
         </View>
         <View style={styles.verticalContent}>
           <Text style={styles.title} numberOfLines={2}>
-            {course.name}
+            {course.name || "Untitled Course"}
           </Text>
-          <Text style={styles.instructor}>{course.desc}</Text>
+          <Text style={styles.instructor}>{course.desc || "No description"}</Text>
           <View style={styles.footer}>
             <View>
-              <Text style={styles.price}>{course.price}</Text>
+              <Text style={styles.price}>{course.price || "$0"}</Text>
               <LessonText />
             </View>
             <View style={styles.rating}>
               <Ionicons name="star" size={14} color="#FFB800" />
               <Text style={styles.ratingText}>
-                {course.averageRate} ({course.numOfRates})
+                {course.averageRate || 0} ({course.numOfRates || 0})
               </Text>
             </View>
           </View>
         </View>
-      </View>
-    );
+      </TouchableOpacity>
+    )
   }
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handlePress}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: course.image }} style={styles.image} />
+        <Image source={imageSource} style={styles.image} />
         {course.isBestSeller && (
           <View style={styles.bestSellerBadge}>
             <Text style={styles.bestSellerText}>Best seller</Text>
@@ -70,26 +86,26 @@ export default function CourseCard({ course, isVertical }: CourseCardProps) {
       </View>
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={2}>
-          {course.name}
+          {course.name || "Untitled Course"}
         </Text>
         <Text style={styles.instructor} numberOfLines={1}>
-          {course.desc}
+          {course.desc || "No description"}
         </Text>
         <View style={styles.footer}>
           <View>
-            <Text style={styles.price}>{course.price}</Text>
+            <Text style={styles.price}>{course.price || "$0"}</Text>
             <LessonText />
           </View>
           <View style={styles.rating}>
             <Ionicons name="star" size={12} color="#FFB800" />
             <Text style={styles.ratingText}>
-              {course.averageRate} ({course.numOfRates})
+              {course.averageRate || 0} ({course.numOfRates || 0})
             </Text>
           </View>
         </View>
       </View>
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -198,4 +214,4 @@ const styles = StyleSheet.create({
     padding: 12,
     justifyContent: "space-between",
   },
-});
+})
