@@ -12,11 +12,12 @@ interface CourseCardProps {
   image: ImageSourcePropType
   isBestSeller?: boolean
   isSaved?: boolean
-  onPress?: () => void
+  onPress?: (id: string) => void // 👈 truyền id khi bấm
   onSavePress?: () => void
 }
 
 export default function CourseCard({
+  id,
   title,
   instructor,
   price,
@@ -30,7 +31,7 @@ export default function CourseCard({
   onSavePress,
 }: CourseCardProps) {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={styles.container} onPress={() => onPress?.(id)}>
       <View style={styles.imageWrapper}>
         <Image source={image} style={styles.image} />
         {isBestSeller && (

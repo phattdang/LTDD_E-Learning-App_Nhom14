@@ -16,14 +16,20 @@ interface Course {
 
 interface SearchResultsListProps {
   results: Course[]
+  onPressCourse: (id: string) => void
 }
 
-export default function SearchResultsList({ results }: SearchResultsListProps) {
+export default function SearchResultsList({ results, onPressCourse }: SearchResultsListProps) {
   return (
     <FlatList
       data={results}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <SearchResultCard course={item} />}
+      renderItem={({ item }) => (
+        <SearchResultCard
+          course={item}
+          onPress={() => onPressCourse(item.id)}
+        />
+      )}
       scrollEnabled={false}
       contentContainerStyle={styles.container}
     />

@@ -26,6 +26,14 @@ const HomeStack = () => {
     </Stack.Navigator>
   )
 }
+// 🔍 Search Stack — thêm vào để có thể navigate tới CourseDetails
+const SearchStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Search" component={SearchScreen} />
+    <Stack.Screen name="CourseDetails" component={CourseDetailsScreen} />
+    <Stack.Screen name="Lesson" component={LessonScreen} />
+  </Stack.Navigator>
+);
 
 const AppStack = () => {
   return (
@@ -44,7 +52,7 @@ const AppStack = () => {
         })}
       >
         <Tab.Screen name="HomeTab" component={HomeStack} options={{ title: "Home" }} />
-        <Tab.Screen name="SearchTab" component={SearchScreen} options={{ title: "Search" }} />
+        <Tab.Screen name="SearchTab" component={SearchStack} options={{ title: "Search" }} />
         <Tab.Screen name="MyCourseTab" component={MyCourseScreen} options={{ title: "My Course" }} />
         <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ title: "Profile" }} />
       </Tab.Navigator>
