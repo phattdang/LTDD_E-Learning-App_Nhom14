@@ -1,16 +1,29 @@
-"use client";
+"use client"
+import React, { useState } from "react"
+import { View, StyleSheet, ScrollView, Text } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import SearchHeader from "../components/search/SearchHeader"
+import HotTopics from "../components/search/HotTopics"
+import Categories from "../components/search/Categories"
+import RecommendedSection from "../components/search/RecommendedSection"
+import SearchResultsList from "../components/search/SearchResultsList"
+import ResultsCount from "../components/search/ResultsCount"
 
-import { useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
-import SearchHeader from "../components/search/SearchHeader";
-import HotTopics from "../components/search/HotTopics";
-import Categories from "../components/search/Categories";
-import RecommendedSection from "../components/search/RecommendedSection";
+// ✅ Định nghĩa type cho Stack thật sự đang dùng (SearchMain và CourseDetails)
+type SearchStackParamList = {
+  SearchMain: undefined
+  CourseDetails: { course: any }
+}
 
 export default function SearchScreen() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showFilter, setShowFilter] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("")
+  const [showFilter, setShowFilter] = useState(false)
 
+  // ✅ navigation cho đúng stack
+  const navigation = useNavigation<NativeStackNavigationProp<SearchStackParamList>>()
+
+  // Dữ liệu mẫu
   const mockCourses = [
     {
       id: "1",
@@ -26,7 +39,7 @@ export default function SearchScreen() {
     },
     {
       id: "2",
-      title: "UX Research For...",
+      title: "UX Research For Beginners",
       instructor: "Olivia Wang",
       price: "$290",
       rating: 4.5,
@@ -36,7 +49,33 @@ export default function SearchScreen() {
       isBestSeller: false,
       isSaved: false,
     },
-  ];
+    {
+      id: "3",
+      title: "Java Programming Masterclass",
+      instructor: "John Doe",
+      price: "$320",
+      rating: 4.7,
+      reviews: 940,
+      lessons: 20,
+      image: require("../../assets/website-design.png"),
+      isBestSeller: true,
+      isSaved: true,
+    },
+  ]
+
+  // Lọc theo từ khóa
+  const filteredCourses = mockCourses.filter((course) =>
+    course.title.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  // ✅ Khi nhấn vào khóa học
+  const handlePressCourse = (id: string) => {
+    const selectedCourse = (searchQuery ? filteredCourses : mockCourses).find((c) => c.id === id)
+    if (selectedCourse) {
+      // ✅ Dùng tên màn hình "CourseDetails" đúng với SearchStack
+      navigation.navigate("CourseDetails", { course: selectedCourse })
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -45,13 +84,26 @@ export default function SearchScreen() {
         onSearchChange={setSearchQuery}
         onFilterPress={() => setShowFilter(!showFilter)}
       />
+
       <ScrollView showsVerticalScrollIndicator={false}>
         <HotTopics onTopicSelect={(topic) => setSearchQuery(topic)} />
         <Categories />
-        <RecommendedSection courses={mockCourses} />
+
+        {searchQuery ? (
+          filteredCourses.length > 0 ? (
+            <>
+              <ResultsCount count={filteredCourses.length} />
+              <SearchResultsList results={filteredCourses} onPressCourse={handlePressCourse} />
+            </>
+          ) : (
+            <Text style={styles.noResultText}>No courses found</Text>
+          )
+        ) : (
+          <RecommendedSection courses={mockCourses} onPressCourse={handlePressCourse} />
+        )}
       </ScrollView>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -59,4 +111,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-});
+  noResultText: {
+    textAlign: "center",
+    marginTop: 20,
+    color: "#888",
+    fontSize: 14,
+  },
+})

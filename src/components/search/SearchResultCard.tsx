@@ -19,13 +19,14 @@ interface Course {
 
 interface SearchResultCardProps {
   course: Course
+  onPress?: () => void
 }
 
-export default function SearchResultCard({ course }: SearchResultCardProps) {
+export default function SearchResultCard({ course, onPress }: SearchResultCardProps) {
   const [isSaved, setIsSaved] = useState(course.isSaved)
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.imageContainer}>
         <Image source={course.image} style={styles.image} />
         {course.isBestSeller && (
@@ -61,7 +62,7 @@ export default function SearchResultCard({ course }: SearchResultCardProps) {
           <Text style={styles.lessons}>{course.lessons} lessons</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 

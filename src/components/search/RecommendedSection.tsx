@@ -17,9 +17,10 @@ interface Course {
 interface RecommendedSectionProps {
   courses: Course[]
   onViewMore?: () => void
+  onPressCourse?: (id: string) => void // 👈 thêm callback
 }
 
-export default function RecommendedSection({ courses, onViewMore }: RecommendedSectionProps) {
+export default function RecommendedSection({ courses, onViewMore, onPressCourse }: RecommendedSectionProps) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -30,7 +31,7 @@ export default function RecommendedSection({ courses, onViewMore }: RecommendedS
       </View>
       <View style={styles.coursesList}>
         {courses.map((course) => (
-          <CourseCard key={course.id} {...course} />
+          <CourseCard key={course.id} {...course} onPress={onPressCourse} />
         ))}
       </View>
     </View>
