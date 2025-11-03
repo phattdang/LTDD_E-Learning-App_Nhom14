@@ -1,32 +1,41 @@
-import { View, Text, StyleSheet, Image } from "react-native"
+import { View, Text, StyleSheet, Image } from "react-native";
 
 interface CourseCardProps {
   course: {
-    id: string
-    title: string
-    duration: string
-    progress: number
-    image: any
-  }
+    id: string;
+    name: string;
+    duration: string;
+    progress: number;
+    image: any;
+  };
 }
 
 export default function CourseCard({ course }: CourseCardProps) {
   return (
     <View style={styles.card}>
-      <Image source={course.image} style={styles.courseImage} />
+      <Image
+        source={
+          typeof course.image === "string"
+            ? { uri: course.image }
+            : course.image // phòng trường hợp là require()
+        }
+        style={styles.courseImage}
+      />
       <View style={styles.content}>
-        <Text style={styles.courseTitle}>{course.title}</Text>
+        <Text style={styles.courseTitle}>{course.name}</Text>
         <Text style={styles.duration}>{course.duration}</Text>
 
         <View style={styles.progressContainer}>
           <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: `${course.progress}%` }]} />
+            <View
+              style={[styles.progressFill, { width: `${course.progress}%` }]}
+            />
           </View>
           <Text style={styles.progressText}>{course.progress}% Complete</Text>
         </View>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -80,4 +89,4 @@ const styles = StyleSheet.create({
     color: "#06B6D4",
     fontWeight: "500",
   },
-})
+});
