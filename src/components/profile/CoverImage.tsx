@@ -1,15 +1,24 @@
 import { Image, StyleSheet, View } from "react-native";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function CoverImage() {
+  const { user } = useAuth();
+
   return (
     <View style={styles.container}>
+      {/* ảnh nền vẫn giữ nguyên */}
       <Image
         source={require("../../../assets/workspace-with-keyboard-and-laptop.png")}
         style={styles.coverImage}
       />
+
       <View style={styles.avatarContainer}>
         <Image
-          source={require("../../../assets/professional-woman-portrait.png")}
+          source={
+            user?.avatar
+              ? { uri: user.avatar } // 👈 avatar thật từ API
+              : require("../../../assets/professional-woman-portrait.png") // fallback
+          }
           style={styles.avatar}
         />
       </View>

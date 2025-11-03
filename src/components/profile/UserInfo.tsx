@@ -1,12 +1,25 @@
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function UserInfo() {
+  const { user } = useAuth(); // 🧠 lấy user từ context
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.name}>Chưa đăng nhập</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>Martha Rosie</Text>
-      <Text style={styles.role}>UX/UI Designer</Text>
+      <Text style={styles.name}>
+        {user.firstName} {user.lastName}
+      </Text>
+      {/* <Text style={styles.role}>{user.role || "Người dùng"}</Text> */}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -24,4 +37,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#999",
   },
-})
+});
