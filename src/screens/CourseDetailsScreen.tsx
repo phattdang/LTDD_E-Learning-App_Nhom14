@@ -1,42 +1,61 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { ScrollView, View, StyleSheet, Text, TouchableOpacity, Image } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import type Course from "../types/Course"
-import CourseDetailsOverviewTab from "../components/course-details/CourseDetailsOverviewTab"
-import CourseDetailsLessonsTab from "../components/course-details/CourseDetailsLessonsTab"
-import CourseDetailsProjectsTab from "../components/lesson-details/CourseDetailsProjectsTab"
-import CourseDetailsQATab from "../components/lesson-details/CourseDetailsQATab"
-import CourseDetailsReviewTab from "../components/course-details/CourseDetailsReviewTab"
+import type React from "react";
+import { useState } from "react";
+import {
+  ScrollView,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import type Course from "../types/Course";
+import CourseDetailsOverviewTab from "../components/course-details/CourseDetailsOverviewTab";
+import CourseDetailsLessonsTab from "../components/course-details/CourseDetailsLessonsTab";
+import CourseDetailsProjectsTab from "../components/lesson-details/CourseDetailsProjectsTab";
+import CourseDetailsQATab from "../components/lesson-details/CourseDetailsQATab";
+import CourseDetailsReviewTab from "../components/course-details/CourseDetailsReviewTab";
+import { useAuth } from "../contexts/AuthContext";
+import userApi from "../apis/userApi";
 
 interface CourseDetailsScreenProps {
   route: {
     params?: {
-      course?: Course
-    }
-  }
-  navigation: any
+      course?: Course;
+    };
+  };
+  navigation: any;
 }
 
-type TabName = "overview" | "lessons" | "projects" | "qa" | "review"
+type TabName = "overview" | "lessons" | "projects" | "qa" | "review";
 
-const CourseDetailsScreen: React.FC<CourseDetailsScreenProps> = ({ route, navigation }) => {
-  const course = route?.params?.course
-  const [activeTab, setActiveTab] = useState<TabName>("overview")
+const CourseDetailsScreen: React.FC<CourseDetailsScreenProps> = ({
+  route,
+  navigation,
+}) => {
+  const course = route?.params?.course;
+  const { user, setUser } = useAuth();
+  const [activeTab, setActiveTab] = useState<TabName>("overview");
 
   // 🔹 Nếu không có dữ liệu course, hiển thị thông báo và ngăn crash
   if (!course) {
-    console.warn("⚠️ Không nhận được dữ liệu 'course' trong route.params")
+    console.warn("⚠️ Không nhận được dữ liệu 'course' trong route.params");
     return (
       <View style={styles.missingContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: 12 }}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{ marginBottom: 12 }}
+        >
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.missingText}>Không có thông tin khóa học để hiển thị</Text>
+        <Text style={styles.missingText}>
+          Không có thông tin khóa học để hiển thị
+        </Text>
       </View>
-    )
+    );
   }
 
   const renderHeader = () => (
@@ -54,14 +73,19 @@ const CourseDetailsScreen: React.FC<CourseDetailsScreenProps> = ({ route, naviga
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 
   const renderBanner = () => (
     <View style={styles.bannerContainer}>
       {course.image ? (
         <Image source={{ uri: course.image }} style={styles.bannerImage} />
       ) : (
-        <View style={[styles.bannerImage, { justifyContent: "center", alignItems: "center" }]}>
+        <View
+          style={[
+            styles.bannerImage,
+            { justifyContent: "center", alignItems: "center" },
+          ]}
+        >
           <Text style={{ color: "#555" }}>Không có hình ảnh</Text>
         </View>
       )}
@@ -75,7 +99,7 @@ const CourseDetailsScreen: React.FC<CourseDetailsScreenProps> = ({ route, naviga
         <Text style={styles.bannerTitle}>{course.name}</Text>
       </View>
     </View>
-  )
+  );
 
   const renderCourseInfo = () => (
     <View style={styles.infoContainer}>
@@ -90,7 +114,7 @@ const CourseDetailsScreen: React.FC<CourseDetailsScreenProps> = ({ route, naviga
         <Text style={styles.lessonsText}>{course.numOfLessons} lessons</Text>
       </View>
     </View>
-  )
+  );
 
   const renderTabNavigation = () => (
     <View style={styles.tabContainer}>
@@ -98,45 +122,90 @@ const CourseDetailsScreen: React.FC<CourseDetailsScreenProps> = ({ route, naviga
         <TouchableOpacity
           key={tab}
           onPress={() => setActiveTab(tab)}
-          style={[styles.tabButton, activeTab === tab && styles.activeTabButton]}
+          style={[
+            styles.tabButton,
+            activeTab === tab && styles.activeTabButton,
+          ]}
         >
-          <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+          <Text
+            style={[styles.tabText, activeTab === tab && styles.activeTabText]}
+          >
             {tab.toUpperCase()}
           </Text>
         </TouchableOpacity>
       ))}
     </View>
-  )
+  );
 
   const renderTabContent = () => {
     switch (activeTab) {
       case "overview":
-        return <CourseDetailsOverviewTab course={course} />
+        return <CourseDetailsOverviewTab course={course} />;
       case "lessons":
-        return <CourseDetailsLessonsTab />
+        return <CourseDetailsLessonsTab />;
       // case "projects":
       //   return <CourseDetailsProjectsTab />
       // case "qa":
       //   return <CourseDetailsQATab />
       case "review":
-        return <CourseDetailsReviewTab course={course} />
+        return <CourseDetailsReviewTab course={course} />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   const renderFooter = () => (
     <View style={styles.footer}>
       <View>
         <Text style={styles.priceLabel}>{course.price}</Text>
-        {course.discount && <Text style={styles.discount}>{course.discount}</Text>}
+        {course.discount && (
+          <Text style={styles.discount}>{course.discount}</Text>
+        )}
       </View>
-      <TouchableOpacity style={styles.addToCartButton}>
+      <TouchableOpacity
+        style={styles.addToCartButton}
+        onPress={handleAddToCart}
+      >
         <Ionicons name="cart" size={20} color="#fff" />
         <Text style={styles.addToCartText}>Add to cart</Text>
       </TouchableOpacity>
     </View>
-  )
+  );
+  const handleAddToCart = async () => {
+    if (!user) {
+      Alert.alert("Thông báo", "Bạn cần đăng nhập trước khi thêm giỏ hàng");
+      return;
+    }
+
+    // 🧠 Chuyển course.id sang number nếu có thể
+    const courseId = Number(course.id);
+
+    // ✅ Kiểm tra user đã mua khóa học chưa
+    if (user.courseId?.some((id) => Number(id) === courseId)) {
+      Alert.alert("Thông báo", "Bạn đã sở hữu khóa học này rồi");
+      return;
+    }
+
+    // ✅ Kiểm tra xem khóa học đã có trong giỏ chưa
+    if (user.cartCourseIds?.some((id) => Number(id) === courseId)) {
+      Alert.alert("Thông báo", "Khóa học này đã có trong giỏ hàng");
+      return;
+    }
+
+    try {
+      // ✅ Thêm vào giỏ hàng
+      const updatedCart = [...(user.cartCourseIds || []), courseId];
+      const updatedUser = { ...user, cartCourseIds: updatedCart };
+
+      await userApi.update(user.id, { cartCourseIds: updatedCart });
+      setUser(updatedUser);
+
+      Alert.alert("Thành công", "Đã thêm vào giỏ hàng");
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Lỗi", "Không thể thêm vào giỏ hàng, thử lại sau");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -150,8 +219,8 @@ const CourseDetailsScreen: React.FC<CourseDetailsScreenProps> = ({ route, naviga
       </ScrollView>
       {renderFooter()}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f5f5f5" },
@@ -175,7 +244,12 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 16, fontWeight: "600", color: "#333" },
   headerActions: { flexDirection: "row", alignItems: "center" },
   content: { flex: 1 },
-  bannerContainer: { position: "relative", width: "100%", height: 200, backgroundColor: "#ddd" },
+  bannerContainer: {
+    position: "relative",
+    width: "100%",
+    height: 200,
+    backgroundColor: "#ddd",
+  },
   bannerImage: { width: "100%", height: "100%", resizeMode: "cover" },
   playButtonContainer: {
     ...StyleSheet.absoluteFillObject,
@@ -200,8 +274,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
-  courseName: { fontSize: 16, fontWeight: "600", color: "#333", marginBottom: 8 },
-  ratingRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  courseName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 8,
+  },
+  ratingRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   rating: { flexDirection: "row", alignItems: "center", gap: 4 },
   ratingText: { fontSize: 12, color: "#666" },
   lessonsText: { fontSize: 12, color: "#666" },
@@ -245,6 +328,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   addToCartText: { color: "#fff", fontWeight: "600", fontSize: 14 },
-})
+});
 
-export default CourseDetailsScreen
+export default CourseDetailsScreen;
