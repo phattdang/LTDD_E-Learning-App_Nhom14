@@ -15,8 +15,6 @@ import accountsApi from "../apis/accountApi";
 export default function HomeScreen() {
   const { data, loading, error, refetch } = useFetch<Course>(courseApi.getAll);
 
- 
-
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Header />

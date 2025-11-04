@@ -16,6 +16,7 @@ interface AuthContextType {
     accounts: any[]
   ) => Promise<void>;
   logout: () => void;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>; // ✅ thêm dòng này
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -95,7 +96,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, user, loading, login, signup, logout }}
+      value={{ isLoggedIn, user, loading, login, signup, logout, setUser }}
     >
       {children}
     </AuthContext.Provider>

@@ -6,4 +6,5 @@ export default interface User {
   address: string;
   desc: string;
   courseId: number[];
+  cartCourseIds: number[];
 }

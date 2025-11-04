@@ -1,7 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { ShoppingCart, Bell } from "lucide-react-native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 export default function Header() {
+  const navigation = useNavigation<NavigationProp<any>>();
+
   return (
     <View style={styles.container}>
       <View>
@@ -9,7 +12,7 @@ export default function Header() {
         <Text style={styles.subtitle}>What do you want to learn today?</Text>
       </View>
       <View style={styles.icons}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
           <ShoppingCart size={24} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity style={{ marginLeft: 16 }}>

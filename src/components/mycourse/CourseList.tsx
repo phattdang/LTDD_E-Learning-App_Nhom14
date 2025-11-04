@@ -1,16 +1,16 @@
-import { View, StyleSheet, FlatList } from "react-native"
-import CourseCard from "./CourseCard"
+import { View, StyleSheet, FlatList } from "react-native";
+import CourseCard from "./CourseCard";
 
 interface Course {
-  id: string
-  title: string
-  duration: string
-  progress: number
-  image: any
+  id: string;
+  title: string;
+  duration: string;
+  progress: number;
+  image: any;
 }
 
 interface CourseListProps {
-  courses: Course[]
+  courses: Course[];
 }
 
 export default function CourseList({ courses }: CourseListProps) {
@@ -23,7 +23,7 @@ export default function CourseList({ courses }: CourseListProps) {
         scrollEnabled={false}
       />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-})
+});
