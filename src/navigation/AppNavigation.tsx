@@ -23,7 +23,14 @@ const HomeStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="CourseDetails" component={CourseDetailsScreen} />
-      <Stack.Screen name="Lesson" component={LessonScreen} />
+      <Stack.Screen
+        name="Lesson"
+        component={LessonScreen}
+        options={{
+          headerShown: true,
+          title: "Bài học",
+        }}
+      />
       <Stack.Screen
         name="Cart"
         component={CartScreen}
@@ -37,7 +44,14 @@ const SearchStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Search" component={SearchScreen} />
     <Stack.Screen name="CourseDetails" component={CourseDetailsScreen} />
-    <Stack.Screen name="Lesson" component={LessonScreen} />
+    <Stack.Screen
+      name="Lesson"
+      component={LessonScreen}
+      options={{
+        headerShown: true,
+        title: "Bài học",
+      }}
+    />
   </Stack.Navigator>
 );
 

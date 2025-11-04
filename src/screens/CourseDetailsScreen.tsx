@@ -142,7 +142,7 @@ const CourseDetailsScreen: React.FC<CourseDetailsScreenProps> = ({
       case "overview":
         return <CourseDetailsOverviewTab course={course} />;
       case "lessons":
-        return <CourseDetailsLessonsTab />;
+        return <CourseDetailsLessonsTab courseId={course.id} />;
       // case "projects":
       //   return <CourseDetailsProjectsTab />
       // case "qa":

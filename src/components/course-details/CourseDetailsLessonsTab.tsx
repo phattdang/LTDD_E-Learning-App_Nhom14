@@ -1,109 +1,101 @@
-import React, { useState } from "react"
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import { useNavigation } from "@react-navigation/native"
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Lesson from "../../types/Lesson";
+import lessonApi from "../../apis/lessonApi";
 
-// 🧭 Khai báo kiểu điều hướng
 type RootStackParamList = {
-  CourseDetails: undefined
-  Lesson: { lessonId: number; lessonTitle: string } // 👈 truyền id & tiêu đề qua màn hình Lesson
+  CourseDetails: undefined;
+  Lesson: { lesson: Lesson };
+};
+
+type LessonNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Lesson"
+>;
+
+interface Props {
+  courseId: number | string;
 }
 
-type LessonNavigationProp = NativeStackNavigationProp<RootStackParamList, "Lesson">
+const CourseDetailsLessonsTab: React.FC<Props> = ({ courseId }) => {
+  const navigation = useNavigation<LessonNavigationProp>();
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [loading, setLoading] = useState(true);
 
-const CourseDetailsLessonsTab: React.FC = () => {
-  const navigation = useNavigation<LessonNavigationProp>()
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const res = await lessonApi.getAll();
+        const filtered = res.data.filter(
+          (l) => Number(l.courseId) === Number(courseId)
+        );
+        setLessons(filtered);
+      } catch (error) {
+        console.error("Lỗi khi tải lessons:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLessons();
+  }, [courseId]);
 
-  // Dữ liệu bài học mẫu
-  const sections = [
-    {
-      id: 1,
-      title: "I - Introduction",
-      lessons: [
-        { id: 1, title: "Amet adipisicing consectetur", duration: "01:23 mins", completed: true },
-        { id: 2, title: "Culpa est incididunt enim id adi", duration: "01:23 mins" },
-      ],
-    },
-    {
-      id: 2,
-      title: "II - Plan for your UX Research",
-      lessons: [
-        { id: 3, title: "Exercitation elit incididunt esse", duration: "01:23 mins", locked: true },
-        { id: 4, title: "Duis esse ipsum laboru", duration: "01:23 mins", locked: true },
-      ],
-    },
-  ]
+  const handleLessonPress = (lesson: Lesson) => {
+    navigation.navigate("Lesson", { lesson });
+  };
 
-  const [collapsedSections, setCollapsedSections] = useState<number[]>([])
+  if (loading)
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#00BCD4" />
+      </View>
+    );
 
-  const toggleSection = (sectionId: number) => {
-    setCollapsedSections((prev) =>
-      prev.includes(sectionId) ? prev.filter((id) => id !== sectionId) : [...prev, sectionId]
-    )
-  }
-
-  const handleLessonPress = (lessonId: number, lessonTitle: string) => {
-    navigation.navigate("Lesson", { lessonId, lessonTitle }) // 👈 truyền dữ liệu sang LessonScreen
-  }
+  if (lessons.length === 0)
+    return (
+      <View style={styles.center}>
+        <Text>Chưa có bài học nào cho khóa này</Text>
+      </View>
+    );
 
   return (
     <View style={styles.container}>
-      {sections.map((section) => (
-        <View key={section.id}>
-          {/* Header từng section */}
-          <TouchableOpacity style={styles.sectionHeader} onPress={() => toggleSection(section.id)}>
-            <Text style={styles.sectionHeaderTitle}>{section.title}</Text>
-            <Ionicons
-              name={collapsedSections.includes(section.id) ? "chevron-down" : "chevron-up"}
-              size={20}
-              color="#333"
-            />
-          </TouchableOpacity>
-
-          {/* Danh sách bài học */}
-          {!collapsedSections.includes(section.id) &&
-            section.lessons?.map((lesson) => (
-              <TouchableOpacity
-                key={lesson.id}
-                style={styles.lessonItem}
-                onPress={() => handleLessonPress(lesson.id, lesson.title)}
-              >
-                <View style={styles.lessonNumber}>
-                  <Text style={styles.lessonNumberText}>{String(lesson.id).padStart(2, "0")}</Text>
-                </View>
-
-                <View style={styles.lessonInfo}>
-                  <Text style={styles.lessonTitle}>{lesson.title}</Text>
-                  <Text style={styles.lessonDuration}>{lesson.duration}</Text>
-                </View>
-
-                {lesson.completed ? (
-                  <Ionicons name="checkmark-circle" size={20} color="#00BCD4" />
-                ) : lesson.locked ? (
-                  <Ionicons name="lock-closed" size={20} color="#999" />
-                ) : (
-                  <Ionicons name="play-circle" size={20} color="#00BCD4" />
-                )}
-              </TouchableOpacity>
-            ))}
-        </View>
+      {lessons.map((lesson, index) => (
+        <TouchableOpacity
+          key={lesson.id}
+          style={styles.lessonItem}
+          onPress={() => handleLessonPress(lesson)}
+        >
+          <View style={styles.lessonNumber}>
+            <Text style={styles.lessonNumberText}>
+              {String(index + 1).padStart(2, "0")}
+            </Text>
+          </View>
+          <View style={styles.lessonInfo}>
+            <Text style={styles.lessonTitle}>{lesson.title}</Text>
+            <Text style={styles.lessonDuration}>{lesson.duration}</Text>
+          </View>
+          <Ionicons
+            name={lesson.isFree ? "play-circle" : "lock-closed"}
+            size={20}
+            color={lesson.isFree ? "#00BCD4" : "#999"}
+          />
+        </TouchableOpacity>
       ))}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: { paddingHorizontal: 16, paddingVertical: 12 },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-  },
-  sectionHeaderTitle: { fontSize: 14, fontWeight: "600", color: "#333" },
   lessonItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -126,6 +118,7 @@ const styles = StyleSheet.create({
   lessonInfo: { flex: 1 },
   lessonTitle: { fontSize: 13, fontWeight: "500", color: "#333" },
   lessonDuration: { fontSize: 11, color: "#999", marginTop: 2 },
-})
+  center: { padding: 20, alignItems: "center", justifyContent: "center" },
+});
 
-export default CourseDetailsLessonsTab
+export default CourseDetailsLessonsTab;

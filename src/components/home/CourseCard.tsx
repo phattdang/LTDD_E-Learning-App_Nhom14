@@ -1,45 +1,45 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import { useNavigation } from "@react-navigation/native"
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 interface CourseCardProps {
   course: {
-    id: number
-    name: string
-    image?: string
-    numOfLessons?: number
-    numOfRates?: number
-    averageRate?: number
-    reviews?: any[]
-    desc?: string
-    price?: string
-    types?: string[]
-    isBestSeller?: boolean
-    discount?: string
-  }
-  isVertical?: boolean
+    id: number;
+    name: string;
+    image?: string;
+    numOfLessons?: number;
+    numOfRates?: number;
+    averageRate?: number;
+    reviews?: any[];
+    desc?: string;
+    price?: string;
+    types?: string[];
+    isBestSeller?: boolean;
+    discount?: string;
+  };
+  isVertical?: boolean;
 }
 
 export default function CourseCard({ course, isVertical }: CourseCardProps) {
-  const navigation = useNavigation<any>()
+  const navigation = useNavigation<any>();
 
   if (!course) {
-    console.warn("⚠️ Không nhận được dữ liệu 'course' trong CourseCard.")
-    return null
+    console.warn("⚠️ Không nhận được dữ liệu 'course' trong CourseCard.");
+    return null;
   }
 
   const imageSource =
     course.image && course.image.trim() !== ""
       ? { uri: course.image }
-      : { uri: "https://via.placeholder.com/300x200.png?text=No+Image" }
+      : { uri: "https://via.placeholder.com/300x200.png?text=No+Image" };
 
   const handlePress = () => {
-    navigation.navigate("CourseDetails", { course })
-  }
+    navigation.navigate("CourseDetails", { course });
+  };
 
   const LessonText = () => (
     <Text style={styles.lessonText}>{course.numOfLessons || 0} lessons</Text>
-  )
+  );
 
   if (isVertical) {
     return (
@@ -56,7 +56,9 @@ export default function CourseCard({ course, isVertical }: CourseCardProps) {
           <Text style={styles.title} numberOfLines={2}>
             {course.name || "Untitled Course"}
           </Text>
-          <Text style={styles.instructor}>{course.desc || "No description"}</Text>
+          <Text style={styles.instructor}>
+            {course.desc || "No description"}
+          </Text>
           <View style={styles.footer}>
             <View>
               <Text style={styles.price}>{course.price || "$0"}</Text>
@@ -71,7 +73,7 @@ export default function CourseCard({ course, isVertical }: CourseCardProps) {
           </View>
         </View>
       </TouchableOpacity>
-    )
+    );
   }
 
   return (
@@ -105,7 +107,7 @@ export default function CourseCard({ course, isVertical }: CourseCardProps) {
         </View>
       </View>
     </TouchableOpacity>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -214,4 +216,4 @@ const styles = StyleSheet.create({
     padding: 12,
     justifyContent: "space-between",
   },
-})
+});

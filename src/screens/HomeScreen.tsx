@@ -11,8 +11,10 @@ import Course from "../types/Course";
 import courseApi from "../apis/courseApi";
 import Account from "../types/Account";
 import accountsApi from "../apis/accountApi";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen() {
+  const navigation = useNavigation<any>();
   const { data, loading, error, refetch } = useFetch<Course>(courseApi.getAll);
 
   return (
