@@ -1,18 +1,26 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native"
-import { LinearGradient } from "expo-linear-gradient"
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function PromoBanner() {
   return (
-    <LinearGradient colors={["#8B5CF6", "#A78BFA"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.banner}>
+    <LinearGradient
+      colors={["#8B5CF6", "#A78BFA"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.banner}
+    >
       <View style={styles.content}>
         <Text style={styles.bannerText}>Courses that boost your career!</Text>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Check Now</Text>
         </TouchableOpacity>
       </View>
-      <Image source={require("../../../assets/boost-career-banner.jpg")} style={styles.bannerImage} />
+      <Image
+        source={require("../../../assets/boost_career_banner.jpg")}
+        style={styles.bannerImage}
+      />
     </LinearGradient>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -52,4 +60,4 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 8,
   },
-})
+});

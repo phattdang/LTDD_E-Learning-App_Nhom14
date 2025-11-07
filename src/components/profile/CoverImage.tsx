@@ -8,7 +8,7 @@ export default function CoverImage() {
     <View style={styles.container}>
       {/* ảnh nền vẫn giữ nguyên */}
       <Image
-        source={require("../../../assets/workspace-with-keyboard-and-laptop.png")}
+        source={require("../../../assets/workspace_with_keyboard_and_laptop.png")}
         style={styles.coverImage}
       />
 
@@ -17,7 +17,7 @@ export default function CoverImage() {
           source={
             user?.avatar
               ? { uri: user.avatar } // 👈 avatar thật từ API
-              : require("../../../assets/professional-woman-portrait.png") // fallback
+              : require("../../../assets/professional_woman_portrait.png") // fallback
           }
           style={styles.avatar}
         />

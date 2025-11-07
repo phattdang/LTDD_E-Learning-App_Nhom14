@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const CATEGORIES = [
   { name: "Business", icon: "briefcase", color: "#17C1E8" },
@@ -7,10 +7,10 @@ const CATEGORIES = [
   { name: "Code", icon: "code-braces", color: "#E74C3C" },
   { name: "Movie", icon: "filmstrip", color: "#8E44AD" },
   { name: "Language", icon: "translation", color: "#E67E22" },
-]
+];
 
 interface CategoriesProps {
-  onCategorySelect?: (category: string) => void
+  onCategorySelect?: (category: string) => void;
 }
 
 export default function Categories({ onCategorySelect }: CategoriesProps) {
@@ -29,14 +29,19 @@ export default function Categories({ onCategorySelect }: CategoriesProps) {
             style={styles.categoryItem}
             onPress={() => onCategorySelect?.(category.name)}
           >
-            <MaterialCommunityIcons name={category.icon} size={24} color={category.color} />
+            {/* <MaterialCommunityIcons name={category.icon} size={24} color={category.color} /> */}
             <Text style={styles.categoryName}>{category.name}</Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} color="#999" style={styles.chevron} />
+            <MaterialCommunityIcons
+              name="chevron-right"
+              size={20}
+              color="#999"
+              style={styles.chevron}
+            />
           </TouchableOpacity>
         ))}
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -80,4 +85,4 @@ const styles = StyleSheet.create({
   chevron: {
     marginLeft: "auto",
   },
-})
+});

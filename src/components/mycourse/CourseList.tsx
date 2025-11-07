@@ -16,12 +16,12 @@ interface CourseListProps {
 export default function CourseList({ courses }: CourseListProps) {
   return (
     <View style={styles.container}>
-      <FlatList
+      {/* <FlatList
         data={courses}
         renderItem={({ item }) => <CourseCard course={item} />}
         keyExtractor={(item) => item.id}
         scrollEnabled={false}
-      />
+      /> */}
     </View>
   );
 }

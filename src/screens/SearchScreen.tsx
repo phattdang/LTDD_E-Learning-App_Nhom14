@@ -1,27 +1,28 @@
-"use client"
-import React, { useState } from "react"
-import { View, StyleSheet, ScrollView, Text } from "react-native"
-import { useNavigation } from "@react-navigation/native"
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import SearchHeader from "../components/search/SearchHeader"
-import HotTopics from "../components/search/HotTopics"
-import Categories from "../components/search/Categories"
-import RecommendedSection from "../components/search/RecommendedSection"
-import SearchResultsList from "../components/search/SearchResultsList"
-import ResultsCount from "../components/search/ResultsCount"
+"use client";
+import React, { useState } from "react";
+import { View, StyleSheet, ScrollView, Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import SearchHeader from "../components/search/SearchHeader";
+import HotTopics from "../components/search/HotTopics";
+import Categories from "../components/search/Categories";
+import RecommendedSection from "../components/search/RecommendedSection";
+import SearchResultsList from "../components/search/SearchResultsList";
+import ResultsCount from "../components/search/ResultsCount";
 
 // ✅ Định nghĩa type cho Stack thật sự đang dùng (SearchMain và CourseDetails)
 type SearchStackParamList = {
-  SearchMain: undefined
-  CourseDetails: { course: any }
-}
+  SearchMain: undefined;
+  CourseDetails: { course: any };
+};
 
 export default function SearchScreen() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [showFilter, setShowFilter] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
 
   // ✅ navigation cho đúng stack
-  const navigation = useNavigation<NativeStackNavigationProp<SearchStackParamList>>()
+  const navigation =
+    useNavigation<NativeStackNavigationProp<SearchStackParamList>>();
 
   // Dữ liệu mẫu
   const mockCourses = [
@@ -33,20 +34,8 @@ export default function SearchScreen() {
       rating: 4.5,
       reviews: 1233,
       lessons: 9,
-      image: require("../../assets/website-design.png"),
+      image: require("../../assets/website_design.png"),
       isBestSeller: true,
-      isSaved: false,
-    },
-    {
-      id: "2",
-      title: "UX Research For Beginners",
-      instructor: "Olivia Wang",
-      price: "$290",
-      rating: 4.5,
-      reviews: 1782,
-      lessons: 12,
-      image: require("../../assets/ux-research.png"),
-      isBestSeller: false,
       isSaved: false,
     },
     {
@@ -57,25 +46,27 @@ export default function SearchScreen() {
       rating: 4.7,
       reviews: 940,
       lessons: 20,
-      image: require("../../assets/website-design.png"),
+      image: require("../../assets/website_design.png"),
       isBestSeller: true,
       isSaved: true,
     },
-  ]
+  ];
 
   // Lọc theo từ khóa
   const filteredCourses = mockCourses.filter((course) =>
     course.title.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  );
 
   // ✅ Khi nhấn vào khóa học
   const handlePressCourse = (id: string) => {
-    const selectedCourse = (searchQuery ? filteredCourses : mockCourses).find((c) => c.id === id)
+    const selectedCourse = (searchQuery ? filteredCourses : mockCourses).find(
+      (c) => c.id === id
+    );
     if (selectedCourse) {
       // ✅ Dùng tên màn hình "CourseDetails" đúng với SearchStack
-      navigation.navigate("CourseDetails", { course: selectedCourse })
+      navigation.navigate("CourseDetails", { course: selectedCourse });
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -93,17 +84,23 @@ export default function SearchScreen() {
           filteredCourses.length > 0 ? (
             <>
               <ResultsCount count={filteredCourses.length} />
-              <SearchResultsList results={filteredCourses} onPressCourse={handlePressCourse} />
+              <SearchResultsList
+                results={filteredCourses}
+                onPressCourse={handlePressCourse}
+              />
             </>
           ) : (
             <Text style={styles.noResultText}>No courses found</Text>
           )
         ) : (
-          <RecommendedSection courses={mockCourses} onPressCourse={handlePressCourse} />
+          <RecommendedSection
+            courses={mockCourses}
+            onPressCourse={handlePressCourse}
+          />
         )}
       </ScrollView>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -117,4 +114,4 @@ const styles = StyleSheet.create({
     color: "#888",
     fontSize: 14,
   },
-})
+});

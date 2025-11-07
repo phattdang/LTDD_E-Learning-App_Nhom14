@@ -11,7 +11,7 @@ export default function PromoBanner() {
         </TouchableOpacity>
       </View>
       <Image
-        source={require("../../../assets/promo-person.png")}
+        source={require("../../../assets/promo_person.png")}
         style={styles.image}
       />
     </View>
