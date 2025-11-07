@@ -169,73 +169,122 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    gap: 16,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    justifyContent: "space-between",
-    paddingVertical: 30,
+    paddingHorizontal: 24,
+    justifyContent: "center",
+    paddingVertical: 40,
   },
+
+  // HEADER – SANG TRỌNG, MỜI GỌI
   header: {
-    marginBottom: 40,
+    marginBottom: 48,
+    alignItems: "center",
   },
   title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#000",
-    marginBottom: 8,
+    fontSize: 32,
+    fontWeight: "800",
+    color: "#1a1a1a",
+    letterSpacing: -0.6,
+    textAlign: "center",
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#666",
+    textAlign: "center",
+    marginTop: 8,
+    lineHeight: 22,
   },
+
+  // FORM – HIỆN ĐẠI, DỄ NHẬP
   form: {
-    marginBottom: 20,
+    marginBottom: 32,
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 22,
   },
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#000",
+    color: "#2c2c2c",
     marginBottom: 8,
+    letterSpacing: 0.3,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderWidth: 1.5,
+    borderColor: "#e0e0e0",
+    borderRadius: 16,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#fafafa",
+    color: "#000",
+
+    // Focus effect (giả lập, nhìn sống động)
+    ...Platform.select({
+      ios: {
+        shadowColor: "#17C1E8",
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
+      },
+      android: {
+        elevation: 0,
+      },
+    }),
   },
+
+  // NÚT ĐĂNG KÝ – NỔI BẬT, HẤP DẪN
   signupButton: {
     backgroundColor: "#17C1E8",
-    paddingVertical: 14,
-    borderRadius: 8,
+    paddingVertical: 17,
+    borderRadius: 16,
     alignItems: "center",
+    justifyContent: "center",
+
+    // Hiệu ứng "nút nổi" như MoMo
+    ...Platform.select({
+      ios: {
+        shadowColor: "#17C1E8",
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.35,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 12,
+      },
+    }),
   },
   buttonDisabled: {
     opacity: 0.6,
+    elevation: 0,
   },
   signupButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "700",
+    letterSpacing: 0.5,
   },
+
+  // ĐĂNG NHẬP – NHẸ NHÀNG, CHUYÊN NGHIỆP
   loginContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 24,
   },
   loginText: {
-    fontSize: 14,
-    color: "#666",
+    fontSize: 15,
+    color: "#777",
   },
   loginLink: {
-    fontSize: 14,
+    fontSize: 15,
     color: "#17C1E8",
     fontWeight: "700",
+    marginLeft: 4,
+    textDecorationLine: "underline",
+    textDecorationColor: "#17C1E8",
   },
-})
+});

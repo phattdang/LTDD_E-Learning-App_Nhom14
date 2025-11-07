@@ -22,6 +22,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginTop: 10,
+    paddingHorizontal: 16, // thêm lề 2 bên
+    paddingTop: 8,
+    paddingBottom: 20, // cho không gian dưới
   },
 });

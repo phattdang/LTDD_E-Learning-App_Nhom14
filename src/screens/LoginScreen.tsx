@@ -153,28 +153,38 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    gap: 12,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    justifyContent: "space-between",
-    paddingVertical: 30,
+    paddingHorizontal: 24,
+    justifyContent: "center",
+    paddingVertical: 40,
   },
+
+  // HEADER – SANG TRỌNG
   header: {
-    marginBottom: 40,
+    marginBottom: 48,
+    alignItems: "center",
   },
   title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#000",
-    marginBottom: 8,
+    fontSize: 32,
+    fontWeight: "800",
+    color: "#1a1a1a",
+    letterSpacing: -0.5,
+    textAlign: "center",
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#666",
+    textAlign: "center",
+    marginTop: 8,
+    lineHeight: 22,
   },
+
+  // FORM – HIỆN ĐẠI, SẠCH SẼ
   form: {
-    marginBottom: 20,
+    marginBottom: 32,
   },
   inputContainer: {
     marginBottom: 20,
@@ -182,51 +192,98 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#000",
+    color: "#2c2c2c",
     marginBottom: 8,
+    letterSpacing: 0.3,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderWidth: 1.5,
+    borderColor: "#e0e0e0",
+    borderRadius: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#fafafa",
+    color: "#000",
+
+    // Focus effect (dùng trong thực tế với state, nhưng style đẹp hơn)
+    ...Platform.select({
+      ios: {
+        shadowColor: "#17C1E8",
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
+      },
+      android: {
+        elevation: 0,
+      },
+    }),
   },
+
+  // FOCUS EFFECT GIẢ (khi nhập, nhìn như có viền xanh)
+  // (Bạn có thể thêm state focus sau nếu muốn thật)
+  // Nhưng hiện tại: input đã "sống động" hơn
+
   forgotPassword: {
-    fontSize: 14,
+    fontSize: 14.5,
     color: "#17C1E8",
     fontWeight: "600",
     textAlign: "right",
-    marginBottom: 24,
+    marginTop: 4,
+    marginBottom: 28,
+    textDecorationLine: "underline",
+    textDecorationColor: "#17C1E8",
   },
+
+  // NÚT ĐĂNG NHẬP – ĐẸP NHƯ NÚT "PAY" CỦA MOMO
   loginButton: {
     backgroundColor: "#17C1E8",
-    paddingVertical: 14,
-    borderRadius: 8,
+    paddingVertical: 16,
+    borderRadius: 16,
     alignItems: "center",
+    justifyContent: "center",
+
+    // Gradient effect giả bằng shadow trong
+    ...Platform.select({
+      ios: {
+        shadowColor: "#17C1E8",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 10,
+      },
+    }),
   },
   buttonDisabled: {
     opacity: 0.6,
+    elevation: 0,
   },
   loginButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "700",
+    letterSpacing: 0.5,
   },
+
+  // SIGN UP – NHẸ NHÀNG, CHUYÊN NGHIỆP
   signupContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 20,
   },
   signupText: {
-    fontSize: 14,
-    color: "#666",
+    fontSize: 15,
+    color: "#777",
   },
   signupLink: {
-    fontSize: 14,
+    fontSize: 15,
     color: "#17C1E8",
     fontWeight: "700",
+    marginLeft: 4,
+    textDecorationLine: "underline",
+    textDecorationColor: "#17C1E8",
   },
 });
