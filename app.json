@@ -31,14 +31,12 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-video"
-    ],
+    "plugins": ["expo-video"],
+    "owner": "user664dntp",
     "extra": {
       "eas": {
-        "projectId": "04f483f9-b6b1-4728-9602-a594d0b42619"
+        "projectId": "30073b17-b2f9-49b6-a26a-4e71522d7beb"
       }
-    },
-    "owner": "user664dntp"
+    }
   }
 }
