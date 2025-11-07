@@ -26,7 +26,7 @@ interface Props {
   courseId: number | string;
 }
 
-const CourseDetailsLessonsTab: React.FC<Props> = ({ courseId }) => {
+const CourseDetailsLessonsTabMyCourse: React.FC<Props> = ({ courseId }) => {
   const navigation = useNavigation<LessonNavigationProp>();
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,8 +72,7 @@ const CourseDetailsLessonsTab: React.FC<Props> = ({ courseId }) => {
         <TouchableOpacity
           key={lesson.id}
           style={styles.lessonItem}
-          onPress={lesson.isFree ? () => handleLessonPress(lesson) : undefined}
-          activeOpacity={lesson.isFree ? 0.7 : 1}
+          onPress={() => handleLessonPress(lesson)}
         >
           <View style={styles.lessonNumber}>
             <Text style={styles.lessonNumberText}>
@@ -84,11 +83,7 @@ const CourseDetailsLessonsTab: React.FC<Props> = ({ courseId }) => {
             <Text style={styles.lessonTitle}>{lesson.title}</Text>
             <Text style={styles.lessonDuration}>{lesson.duration}</Text>
           </View>
-          <Ionicons
-            name={lesson.isFree ? "play-circle" : "lock-closed"}
-            size={20}
-            color={lesson.isFree ? "#00BCD4" : "#999"}
-          />
+          <Ionicons name={"play-circle"} size={20} color={"#00BCD4"} />
         </TouchableOpacity>
       ))}
     </View>
@@ -122,4 +117,4 @@ const styles = StyleSheet.create({
   center: { padding: 20, alignItems: "center", justifyContent: "center" },
 });
 
-export default CourseDetailsLessonsTab;
+export default CourseDetailsLessonsTabMyCourse;

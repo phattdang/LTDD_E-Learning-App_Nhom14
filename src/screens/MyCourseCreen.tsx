@@ -27,25 +27,32 @@ export default function MyCourseScreen() {
       if (!user) return;
       setLoading(true);
       try {
-        // 1️⃣ Lấy tất cả enrollments của user
+        console.log("▶️ Gọi API enrollmentApi.getAll()...");
         const enrollRes = await enrollmentApi.getAll();
+
+        // console.log("✅ Kết quả enrollRes:", enrollRes.data);
+
         const userEnrollments = enrollRes.data.filter(
           (enroll) => enroll.userId.toString() === user.id.toString()
         );
 
-        // 2️⃣ Lấy thông tin từng course tương ứng
+        // console.log("✅ Enrollment thuộc user:", userEnrollments);
+
         const coursePromises = userEnrollments.map(async (enroll) => {
+          console.log("🔍 Fetch course ID:", enroll.courseId);
           const courseRes = await courseApi.getById(enroll.courseId.toString());
           return {
             ...courseRes.data,
-            progress: enroll.progress, // gắn thêm progress vào course
+            progress: enroll.progress,
           };
         });
 
         const courseList = await Promise.all(coursePromises);
+        // console.log("📘 Danh sách khóa học:", courseList);
+
         setCourses(courseList);
       } catch (err) {
-        console.error("Lỗi tải khóa học:", err);
+        console.error("❌ Lỗi tải khóa học:", err);
       } finally {
         setLoading(false);
       }

@@ -14,6 +14,7 @@ import SafeAreaWrapper from "../components/SafeAreaWrapper";
 import CourseDetailsScreen from "../screens/CourseDetailsScreen";
 import LessonScreen from "../screens/LessonScreen";
 import CartScreen from "../screens/CartScreen";
+import CourseDetailsScreenMySource from "../components/mycourse/CourseDetailsScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,21 @@ const HomeStack = () => {
     </Stack.Navigator>
   );
 };
+
+const MyCourseStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="MyCourse" component={MyCourseScreen} />
+    <Stack.Screen
+      name="CourseDetails"
+      component={CourseDetailsScreenMySource}
+    />
+    <Stack.Screen
+      name="Lesson"
+      component={LessonScreen}
+      options={{ headerShown: true, title: "Bài học" }}
+    />
+  </Stack.Navigator>
+);
 
 const SearchStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -83,7 +99,7 @@ const AppStack = () => {
         />
         <Tab.Screen
           name="MyCourseTab"
-          component={MyCourseScreen}
+          component={MyCourseStack}
           options={{ title: "My Course" }}
         />
         <Tab.Screen

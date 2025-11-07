@@ -1,5 +1,6 @@
 import { View, StyleSheet, FlatList } from "react-native";
 import CourseCard from "./CourseCard";
+import { useNavigation } from "@react-navigation/native";
 
 interface Course {
   id: string;
@@ -14,14 +15,18 @@ interface CourseListProps {
 }
 
 export default function CourseList({ courses }: CourseListProps) {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      {/* <FlatList
+      <FlatList
         data={courses}
-        renderItem={({ item }) => <CourseCard course={item} />}
+        renderItem={({ item }) => (
+          <CourseCard course={item} navigation={navigation} />
+        )}
         keyExtractor={(item) => item.id}
         scrollEnabled={false}
-      /> */}
+      />
     </View>
   );
 }

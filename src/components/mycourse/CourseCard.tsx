@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 interface CourseCardProps {
   course: {
@@ -10,31 +10,37 @@ interface CourseCardProps {
   };
 }
 
-export default function CourseCard({ course }: CourseCardProps) {
+export default function CourseCard({ course, navigation }: any) {
   return (
-    <View style={styles.card}>
-      <Image
-        source={
-          typeof course.image === "string"
-            ? { uri: course.image }
-            : course.image // phòng trường hợp là require()
-        }
-        style={styles.courseImage}
-      />
-      <View style={styles.content}>
-        <Text style={styles.courseTitle}>{course.name}</Text>
-        <Text style={styles.duration}>{course.duration}</Text>
+    <TouchableOpacity
+      onPress={() => navigation.navigate("CourseDetails", { course })}
+      activeOpacity={0.7}
+    >
+      <View style={styles.card}>
+        <Image
+          source={
+            typeof course.image === "string"
+              ? { uri: course.image }
+              : course.image
+          }
+          style={styles.courseImage}
+        />
 
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View
-              style={[styles.progressFill, { width: `${course.progress}%` }]}
-            />
+        <View style={styles.content}>
+          <Text style={styles.courseTitle}>{course.name}</Text>
+          <Text style={styles.duration}>{course.duration}</Text>
+
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View
+                style={[styles.progressFill, { width: `${course.progress}%` }]}
+              />
+            </View>
+            <Text style={styles.progressText}>{course.progress}% Complete</Text>
           </View>
-          <Text style={styles.progressText}>{course.progress}% Complete</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
