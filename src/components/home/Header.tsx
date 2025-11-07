@@ -1,14 +1,17 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { ShoppingCart, Bell } from "lucide-react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function Header() {
   const navigation = useNavigation<NavigationProp<any>>();
-
+  const { user } = useAuth();
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.greeting}>Hello, Rosie!</Text>
+        <Text style={styles.greeting}>
+          Hello, {user?.firstName} {user?.lastName}!
+        </Text>
         <Text style={styles.subtitle}>What do you want to learn today?</Text>
       </View>
       <View style={styles.icons}>

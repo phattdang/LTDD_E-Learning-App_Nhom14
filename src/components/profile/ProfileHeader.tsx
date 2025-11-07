@@ -1,4 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View, Modal, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Modal,
+  Pressable,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
