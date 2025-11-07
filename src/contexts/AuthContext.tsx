@@ -4,6 +4,8 @@ import type React from "react";
 import { createContext, useContext, useState } from "react";
 import User from "../types/User";
 import userApi from "../apis/userApi";
+import accountsApi from "../apis/accountApi";
+import Account from "../types/Account";
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -16,7 +18,7 @@ interface AuthContextType {
     accounts: any[]
   ) => Promise<void>;
   logout: () => void;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>; // ✅ thêm dòng này
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,6 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // ✅ LOGIN
   const login = async (username: string, password: string, accounts: any[]) => {
     setLoading(true);
     try {
@@ -41,6 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       );
 
       if (!foundAccount) throw new Error("Invalid username or password");
+
       // Gọi API lấy user tương ứng
       const userRes = await userApi.getById(foundAccount.userId);
       const userData = userRes.data;
@@ -52,13 +56,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  // ✅ SIGNUP — tạo user + account mới
   const signup = async (
     username: string,
     password: string,
-    accounts: any[]
+    accounts: Account[]
   ) => {
     setLoading(true);
     try {
+      // 1) Validate
       if (!username || !password) {
         throw new Error("Username and password are required");
       }
@@ -67,22 +73,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         throw new Error("Password must be at least 6 characters");
       }
 
-      const accountExists = accounts.some(
-        (account) => account.username === username
-      );
+      const exists = accounts.some((a) => a.username === username);
+      if (exists) throw new Error("Username already exists");
 
-      if (accountExists) {
-        throw new Error("Username already exists");
-      }
+      // ✅ 2) Tạo user mới (FULL FIELDS)
+      const newUser = {
+        firstName: username,
+        lastName: "",
+        avatar:
+          "https://res.cloudinary.com/dkrrib3mb/image/upload/v1762155094/student1_akp3el.jpg",
+        address: "",
+        desc: "",
+        courseId: [],
+        cartCourseIds: [],
+      };
 
-      // const userData: User = {
-      //   id: Date.now().toString(),
-      //   username: username,
-      //   userId: "",
-      //   email: username,
-      // };
+      const userRes = await userApi.add(newUser);
+      const createdUser = userRes.data;
 
-      // setUser(userData);
+      // ✅ 3) Tạo account mới (FULL FIELDS)
+      const newAccount = {
+        username,
+        password,
+        userId: createdUser.id,
+        role: ["student"], // default role
+      };
+
+      await accountsApi.add(newAccount);
+
+      // ✅ 4) Tự login luôn
+      setUser(createdUser);
       setIsLoggedIn(true);
     } finally {
       setLoading(false);

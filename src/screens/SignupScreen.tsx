@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import {
   View,
   TextInput,
@@ -12,60 +12,59 @@ import {
   Platform,
   ActivityIndicator,
   Alert,
-} from "react-native"
-import { useAuth } from "../contexts/AuthContext"
+} from "react-native";
+import { useAuth } from "../contexts/AuthContext";
+import accountsApi from "../apis/accountApi";
 
 export default function SignupScreen({ navigation }: any) {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const { signup } = useAuth()
-  const [accounts, setAccounts] = useState<any[]>([])
-  const [accountsLoading, setAccountsLoading] = useState(true)
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { signup } = useAuth();
+  const [accounts, setAccounts] = useState<any[]>([]);
+  const [accountsLoading, setAccountsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const response = await fetch("https://66b87eb42a5dff1a6fa13c81.mockapi.io/api/users/accounts")
-        const data = await response.json()
-        setAccounts(data)
+        const res = await accountsApi.getAll();
+        setAccounts(res.data);
       } catch (error) {
-        console.error("Failed to fetch accounts:", error)
-        Alert.alert("Error", "Failed to load accounts")
+        console.error("Failed to fetch accounts:", error);
       } finally {
-        setAccountsLoading(false)
+        setAccountsLoading(false);
       }
-    }
+    };
 
-    fetchAccounts()
-  }, [])
+    fetchAccounts();
+  }, []);
 
   const handleSignup = async () => {
     if (!username || !password || !confirmPassword) {
-      Alert.alert("Error", "Please fill in all fields")
-      return
+      Alert.alert("Error", "Please fill in all fields");
+      return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match")
-      return
+      Alert.alert("Error", "Passwords do not match");
+      return;
     }
 
     if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters")
-      return
+      Alert.alert("Error", "Password must be at least 6 characters");
+      return;
     }
 
     try {
-      setLoading(true)
-      await signup(username, password, accounts)
+      setLoading(true);
+      await signup(username, password, accounts);
     } catch (error: any) {
-      Alert.alert("Signup Failed", error.message)
+      Alert.alert("Signup Failed", error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (accountsLoading) {
     return (
@@ -74,12 +73,15 @@ export default function SignupScreen({ navigation }: any) {
           <ActivityIndicator size="large" color="#17C1E8" />
         </View>
       </SafeAreaView>
-    )
+    );
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.keyboardView}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.keyboardView}
+      >
         <View style={styles.content}>
           {/* Header */}
           <View style={styles.header}>
@@ -154,7 +156,7 @@ export default function SignupScreen({ navigation }: any) {
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
